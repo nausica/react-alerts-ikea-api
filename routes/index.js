@@ -12,6 +12,15 @@ router.get('/', function(req, res) {
   })
 });
 
+/* GET alerts by email */
+router.get('/:email', function(req, res) {
+  Alert.find({'email': req.params.email}, function(err, alerts) {
+    if (err)
+      res.status(500).json(err);
+    res.json(alerts);
+  })
+});
+
 /* POST create alert */
 router.post('/', function(req, res) {
   var alert = new Alert(req.body);
