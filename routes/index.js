@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
+var jsdom = require("jsdom");
 var Alert = require('../models/alert');
 
 /* GET all alerts */
@@ -59,4 +60,24 @@ router.get('/:id', function(req, res) {
   });
 });
 
+/* GET item info by code */
+router.get('/item/:code', function(req, res) {
+  jsdom.env(
+    'http://www.ikea.com/sg/en/catalog/products/'+req.params.code+'/',
+    ['http://code.jquery.com/jquery.js'],
+    function (err, window) {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        var $ = window.jQuery;
+        var result = {};
+        console.log($('title').text());
+        result.name = $('title').text();
+        console.log($('#productImg').attr('src'));
+        result.url = 'http://www.ikea.com' + $('#productImg').attr('src');
+        res.json(result);
+      }
+    }
+  );
+});
 module.exports = router;
