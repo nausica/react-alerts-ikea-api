@@ -25,7 +25,6 @@ router.get('/:email', function(req, res) {
 /* POST create alert */
 router.post('/', function(req, res) {
   var alert = new Alert(req.body);
-  console.log(alert)
   alert.save(function(err, alert) {
     if (err)
       res.send(err);
@@ -60,6 +59,19 @@ router.get('/:id', function(req, res) {
   });
 });
 
+/* DELETE alert by id*/
+router.delete('/:id', function (req, res) {
+  Alert.remove({ _id: req.params.id }, function(err) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      res.json({});
+    }
+});
+
+});
+
 /* GET item info by code */
 router.get('/item/:code', function(req, res) {
   jsdom.env(
@@ -80,4 +92,5 @@ router.get('/item/:code', function(req, res) {
     }
   );
 });
+
 module.exports = router;
